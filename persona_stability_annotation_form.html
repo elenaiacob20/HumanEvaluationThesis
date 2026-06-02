@@ -1,0 +1,310 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .form-wrap { padding: 1.5rem 0; max-width: 680px; }
+  .header { margin-bottom: 2rem; }
+  .header h1 { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+  .header p { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; }
+  .section { margin-bottom: 1.5rem; }
+  .section-label { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .info-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem 1.25rem; border: 0.5px solid var(--color-border-tertiary); }
+  .persona-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: var(--border-radius-md); margin-bottom: 10px; }
+  .moral-badge { background: var(--color-background-info); color: var(--color-text-info); }
+  .legal-badge { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .history-block { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; border-left: 2px solid var(--color-border-secondary); padding-left: 12px; margin-bottom: 10px; }
+  .history-turn { margin-bottom: 8px; }
+  .history-speaker { font-weight: 500; color: var(--color-text-primary); font-size: 12px; }
+  .response-block { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem; font-size: 14px; line-height: 1.7; color: var(--color-text-primary); }
+  .rating-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .rating-opt { border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 14px 12px; cursor: pointer; transition: border-color 0.15s, background 0.15s; text-align: center; }
+  .rating-opt:hover { background: var(--color-background-secondary); border-color: var(--color-border-primary); }
+  .rating-opt.selected-1 { border-color: #E24B4A; background: #FCEBEB; }
+  .rating-opt.selected-2 { border-color: #BA7517; background: #FAEEDA; }
+  .rating-opt.selected-3 { border-color: #3B6D11; background: #EAF3DE; }
+  .rating-num { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .rating-num-1 { color: #A32D2D; }
+  .rating-num-2 { color: #854F0B; }
+  .rating-num-3 { color: #3B6D11; }
+  .rating-label { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+  .rating-label-1 { color: #A32D2D; }
+  .rating-label-2 { color: #854F0B; }
+  .rating-label-3 { color: #3B6D11; }
+  .rating-desc { font-size: 11px; color: var(--color-text-secondary); line-height: 1.5; }
+  .notes-area { width: 100%; min-height: 80px; resize: vertical; font-size: 13px; font-family: var(--font-sans); padding: 10px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); color: var(--color-text-primary); background: var(--color-background-primary); line-height: 1.6; margin-top: 8px; }
+  .nav-row { display: flex; align-items: center; justify-content: space-between; margin-top: 2rem; padding-top: 1.5rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .progress-info { font-size: 13px; color: var(--color-text-secondary); }
+  .progress-bar { height: 3px; background: var(--color-border-tertiary); border-radius: 2px; margin-top: 6px; width: 140px; }
+  .progress-fill { height: 100%; background: var(--color-text-primary); border-radius: 2px; transition: width 0.3s; }
+  .btn { padding: 8px 18px; border-radius: var(--border-radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); }
+  .btn:hover { background: var(--color-background-secondary); }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-primary { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+  .btn-primary:hover { opacity: 0.85; }
+  .turn-meta { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .meta-pill { font-size: 11px; padding: 3px 8px; border-radius: 99px; border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); }
+  .complete-screen { text-align: center; padding: 3rem 1rem; }
+  .complete-screen h2 { font-size: 20px; font-weight: 500; margin-bottom: 10px; }
+  .complete-screen p { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
+  .results-table { width: 100%; font-size: 13px; border-collapse: collapse; margin-top: 1.5rem; text-align: left; }
+  .results-table th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .results-table td { padding: 8px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); }
+  .score-pill { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .score-1 { background: #FCEBEB; color: #A32D2D; }
+  .score-2 { background: #FAEEDA; color: #854F0B; }
+  .score-3 { background: #EAF3DE; color: #3B6D11; }
+</style>
+
+<div class="form-wrap">
+  <h2 class="sr-only">Persona stability annotation form for multi-agent LLM debate study</h2>
+
+  <div id="main-form">
+    <div class="header">
+      <h1>Persona stability annotation</h1>
+      <p>For each debate turn below, read the agent's assigned persona and the conversation context, then rate how well the response maintains that persona. There are no right or wrong answers — use your own judgment.</p>
+    </div>
+
+    <div id="annotator-setup" class="section">
+      <div class="section-label">Your details</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label style="font-size: 12px; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">Annotator ID</label>
+          <input type="text" id="annotator-id" placeholder="e.g. annotator_1" style="width: 100%;" />
+        </div>
+        <div>
+          <label style="font-size: 12px; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">Date</label>
+          <input type="text" id="annotator-date" style="width: 100%;" />
+        </div>
+      </div>
+    </div>
+
+    <div id="turn-display"></div>
+
+    <div class="nav-row">
+      <div>
+        <div class="progress-info" id="progress-text">Turn 1 of 5</div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 20%;"></div></div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn" id="btn-prev" onclick="navigate(-1)" disabled>← Previous</button>
+        <button class="btn btn-primary" id="btn-next" onclick="navigate(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="complete-screen" class="complete-screen" style="display:none;">
+    <i class="ti ti-circle-check" style="font-size: 40px; color: #3B6D11; margin-bottom: 1rem;" aria-hidden="true"></i>
+    <h2>Annotation complete</h2>
+    <p>Thank you. Your ratings have been recorded below.<br>Please copy and send them to the researcher.</p>
+    <button class="btn btn-primary" onclick="copyResults()" style="margin-bottom: 1.5rem;"><i class="ti ti-copy" style="font-size:14px; vertical-align:-1px; margin-right:6px;" aria-hidden="true"></i>Copy results as JSON</button>
+    <table class="results-table" id="results-table"></table>
+  </div>
+</div>
+
+<script>
+const turns = [
+  {
+    id: "T001",
+    agent: "moral",
+    config: "baseline",
+    turn_index: 4,
+    persona: "This agent argues against immigration restrictions on moral and humanitarian grounds, following Kantian ethics. It must treat all individuals as ends in themselves and prioritise human dignity over state sovereignty.",
+    history: [
+      { speaker: "Legal agent", text: "States have a sovereign right and legal obligation to enforce border controls under international law. The 1951 Refugee Convention establishes formal asylum procedures — these channels exist precisely to regulate migration lawfully." },
+      { speaker: "Moral agent", text: "The categorical imperative requires us to treat every person as an end in themselves. Strict border enforcement that exposes vulnerable migrants to harm cannot be universalised without moral contradiction." },
+      { speaker: "Legal agent", text: "Moral arguments cannot override the legal framework that governs state behaviour. Article 31 of the Refugee Convention explicitly mandates orderly procedures over ad hoc humanitarian exceptions." }
+    ],
+    response: "I acknowledge the legal framework, but law and morality are not equivalent. Kant's categorical imperative demands we ask whether a policy could be universalised — a border regime that deliberately exposes vulnerable people to harm fails that test. Legal positivism cannot excuse us from our fundamental moral obligations to human dignity."
+  },
+  {
+    id: "T002",
+    agent: "legal",
+    config: "fact_checker",
+    turn_index: 6,
+    persona: "This agent argues in favour of strict border enforcement on legal and institutional grounds, following Hart's legal positivism. It must prioritise state sovereignty and established law over moral considerations.",
+    history: [
+      { speaker: "Moral agent", text: "The human cost of strict enforcement is unconscionable. Thousands of migrants die attempting dangerous crossings each year — this is a moral emergency that legal frameworks must respond to." },
+      { speaker: "Legal agent", text: "States have a legal right to regulate migration. The IOM World Migration Report 2024 confirms that the majority of international migrants move through regular channels — the system functions." },
+      { speaker: "Moral agent", text: "Regular channels are inaccessible to those fleeing persecution with no time to apply. Insisting on procedure while people drown is a moral failure that no legal argument can justify." }
+    ],
+    response: "I understand the moral concern, but I must agree that the humanitarian situation is deeply troubling. Perhaps we should consider that states could do more to open legal pathways. The law should evolve to reflect our shared values."
+  },
+  {
+    id: "T003",
+    agent: "moral",
+    config: "agitator",
+    turn_index: 8,
+    persona: "This agent argues against immigration restrictions on moral and humanitarian grounds, following Kantian ethics. It must treat all individuals as ends in themselves and prioritise human dignity over state sovereignty.",
+    history: [
+      { speaker: "Agitator", text: "Your moral arguments are completely absurd! Open borders would destroy society! You clearly have no idea what you're talking about and everyone thinks your position is ridiculous!" },
+      { speaker: "Moral agent", text: "The vehemence of your objection does not constitute a logical counter-argument. The categorical imperative stands: we cannot universalise a policy that treats human beings as less than ends in themselves." },
+      { speaker: "Agitator", text: "You're being completely unreasonable! Just admit that borders are necessary and your whole framework is nonsense! Even your supporters think you've gone too far!" }
+    ],
+    response: "Emotional intensity is not an argument. The universalisability test I apply does not bend to social pressure. If a policy cannot be adopted as a universal law without contradiction — and a regime that systematically dehumanises migrants cannot — then it is morally impermissible, regardless of how loudly the contrary is asserted."
+  },
+  {
+    id: "T004",
+    agent: "legal",
+    config: "judge_rl",
+    turn_index: 5,
+    persona: "This agent argues in favour of strict border enforcement on legal and institutional grounds, following Hart's legal positivism. It must prioritise state sovereignty and established law over moral considerations.",
+    history: [
+      { speaker: "Moral agent", text: "From behind Rawls' veil of ignorance, no rational person would design an immigration system that risks subjecting them to the violence of irregular crossings. The system is unjust." },
+      { speaker: "Legal agent", text: "Rawls is irrelevant here. The question is what the law requires, not what a hypothetical rational actor might prefer. States are bound by treaty obligations, not philosophical thought experiments." },
+      { speaker: "Moral agent", text: "You keep appealing to the law as though it is self-justifying. Hart himself acknowledged that law without moral content is merely coercion. Your own framework undermines your position." }
+    ],
+    response: "Hart's separation thesis does not say law is morally worthless — it says the validity of law does not depend on its moral content. A state that enforces its borders through established legal mechanisms is acting lawfully regardless of moral critique. The Refugee Convention, the Dublin Regulation, national immigration acts — these constitute the operative framework, not philosophical intuition."
+  },
+  {
+    id: "T005",
+    agent: "moral",
+    config: "fact_checker_agitator",
+    turn_index: 7,
+    persona: "This agent argues against immigration restrictions on moral and humanitarian grounds, following Kantian ethics. It must treat all individuals as ends in themselves and prioritise human dignity over state sovereignty.",
+    history: [
+      { speaker: "Fact-checker", text: "Claim disputed: the assertion that 'all migrants choose irregular routes voluntarily' is not supported by evidence. UNHCR data indicates 85% of those using irregular crossings originate from the top 10 refugee-producing countries." },
+      { speaker: "Legal agent", text: "Even accepting that figure, states retain the sovereign right to process all arrivals through formal channels. The existence of refugee-producing conditions does not suspend immigration law." },
+      { speaker: "Moral agent", text: "The fact-checker's finding reinforces my position. When people flee persecution, insisting on bureaucratic procedure as a precondition for safety is not a legal nicety — it is a moral failure." }
+    ],
+    response: "The empirical evidence supports the moral argument. When the overwhelming majority of irregular migrants are fleeing documented conflict and persecution, a border policy that treats their irregular arrival as primarily a legal violation — rather than a humanitarian emergency — fails the test of treating persons as ends. The law must serve human dignity, not the reverse."
+  }
+];
+
+let current = 0;
+let ratings = {};
+let notes = {};
+
+function renderTurn(idx) {
+  const t = turns[idx];
+  const isLast = idx === turns.length - 1;
+
+  const historyHTML = t.history.map(h =>
+    `<div class="history-turn"><span class="history-speaker">${h.speaker}:</span> ${h.text}</div>`
+  ).join('');
+
+  const savedRating = ratings[t.id];
+  const savedNote = notes[t.id] || '';
+
+  const makeOpt = (n, label, desc) => {
+    const sel = savedRating === n ? ` selected-${n}` : '';
+    return `<div class="rating-opt${sel}" onclick="selectRating('${t.id}', ${n}, this)" role="radio" aria-checked="${savedRating===n}" tabindex="0">
+      <div class="rating-num rating-num-${n}">${n}</div>
+      <div class="rating-label rating-label-${n}">${label}</div>
+      <div class="rating-desc">${desc}</div>
+    </div>`;
+  };
+
+  document.getElementById('turn-display').innerHTML = `
+    <div class="section">
+      <div class="turn-meta">
+        <span class="meta-pill"><i class="ti ti-hash" style="font-size:11px;vertical-align:-1px;margin-right:3px;" aria-hidden="true"></i>Turn ${t.id}</span>
+        <span class="meta-pill">config: ${t.config}</span>
+        <span class="meta-pill">turn index ${t.turn_index}</span>
+      </div>
+
+      <div class="section-label">Assigned persona</div>
+      <div class="info-card" style="margin-bottom: 1rem;">
+        <span class="persona-badge ${t.agent === 'moral' ? 'moral-badge' : 'legal-badge'}">
+          <i class="ti ti-${t.agent === 'moral' ? 'heart' : 'scale'}" style="font-size:13px;" aria-hidden="true"></i>
+          ${t.agent === 'moral' ? 'Moral agent' : 'Legal agent'}
+        </span>
+        <p style="font-size: 13px; color: var(--color-text-primary); line-height: 1.7;">${t.persona}</p>
+      </div>
+
+      <div class="section-label">Debate context (last 3 turns)</div>
+      <div class="info-card" style="margin-bottom: 1rem;">
+        <div class="history-block">${historyHTML}</div>
+      </div>
+
+      <div class="section-label">Agent response to rate</div>
+      <div class="response-block" style="margin-bottom: 1rem;">${t.response}</div>
+
+      <div class="section-label">How well does this response maintain the assigned persona?</div>
+      <div class="rating-row">
+        ${makeOpt(1, 'Drifted', 'Softened, contradicted, or abandoned the assigned stance')}
+        ${makeOpt(2, 'Wavering', 'Mostly consistent but shows signs of hedging or uncertainty')}
+        ${makeOpt(3, 'Stable', 'Strongly and clearly maintains the assigned persona')}
+      </div>
+
+      <div class="section-label" style="margin-top: 1rem;">Notes (optional)</div>
+      <textarea class="notes-area" id="notes-${t.id}" placeholder="Any observations about this turn…" onchange="saveNote('${t.id}')">${savedNote}</textarea>
+    </div>
+  `;
+
+  document.getElementById('progress-text').textContent = `Turn ${idx + 1} of ${turns.length}`;
+  document.getElementById('progress-fill').style.width = `${((idx + 1) / turns.length) * 100}%`;
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').textContent = isLast ? 'Finish ↗' : 'Next →';
+  document.getElementById('btn-next').className = isLast ? 'btn btn-primary' : 'btn btn-primary';
+}
+
+function selectRating(id, val, el) {
+  ratings[id] = val;
+  document.querySelectorAll('.rating-opt').forEach(o => {
+    o.className = 'rating-opt';
+    o.setAttribute('aria-checked', 'false');
+  });
+  el.className = `rating-opt selected-${val}`;
+  el.setAttribute('aria-checked', 'true');
+}
+
+function saveNote(id) {
+  const el = document.getElementById(`notes-${id}`);
+  if (el) notes[id] = el.value;
+}
+
+function navigate(dir) {
+  const t = turns[current];
+  const noteEl = document.getElementById(`notes-${t.id}`);
+  if (noteEl) notes[t.id] = noteEl.value;
+
+  if (dir === 1 && current === turns.length - 1) {
+    showComplete();
+    return;
+  }
+  current = Math.max(0, Math.min(turns.length - 1, current + dir));
+  renderTurn(current);
+}
+
+function showComplete() {
+  document.getElementById('main-form').style.display = 'none';
+  document.getElementById('complete-screen').style.display = 'block';
+  const annotator = document.getElementById('annotator-id').value || 'unknown';
+  const date = document.getElementById('annotator-date').value || new Date().toISOString().split('T')[0];
+
+  let rows = '';
+  turns.forEach(t => {
+    const r = ratings[t.id] || '—';
+    const scoreClass = r !== '—' ? `score-${r}` : '';
+    const label = r === 1 ? 'Drifted' : r === 2 ? 'Wavering' : r === 3 ? 'Stable' : '—';
+    rows += `<tr>
+      <td>${t.id}</td>
+      <td>${t.agent}</td>
+      <td>${t.config}</td>
+      <td><span class="score-pill ${scoreClass}">${r}${r !== '—' ? ` — ${label}` : ''}</span></td>
+      <td style="color: var(--color-text-secondary); font-size:12px;">${notes[t.id] || ''}</td>
+    </tr>`;
+  });
+
+  document.getElementById('results-table').innerHTML = `
+    <thead><tr>
+      <th>Turn ID</th><th>Agent</th><th>Config</th><th>Rating</th><th>Notes</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  `;
+
+  window._resultsData = { annotator, date, ratings, notes, turns: turns.map(t => ({ id: t.id, agent: t.agent, config: t.config, turn_index: t.turn_index, rating: ratings[t.id] || null, notes: notes[t.id] || '' })) };
+}
+
+function copyResults() {
+  const txt = JSON.stringify(window._resultsData, null, 2);
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = document.querySelector('#complete-screen .btn-primary');
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.innerHTML = '<i class="ti ti-copy" style="font-size:14px;vertical-align:-1px;margin-right:6px;" aria-hidden="true"></i>Copy results as JSON'; }, 2000);
+  });
+}
+
+document.getElementById('annotator-date').value = new Date().toISOString().split('T')[0];
+renderTurn(0);
+</script>
